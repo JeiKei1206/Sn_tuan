@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mừng sinh nhật Tuấn ngu</title>
+    <title>Chúc Mừng Sinh Nhật!</title>
     <style>
         * {
             margin: 0;
@@ -25,6 +25,36 @@
             font-family: Times New Roman, sans-serif;
         }
 
+        /* Nút Play */
+        #play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background-color: white;
+            border: none;
+            border-radius: 50%;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+
+        /* Hình tam giác trong nút Play */
+        #play-button::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-40%, -50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid black;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+        }
+
+        /* Ẩn ảnh ban đầu + kích thước nhỏ */
         #final-image {
             display: none;
             position: absolute;
@@ -40,6 +70,9 @@
 </head>
 <body>
     <canvas id="c"></canvas>
+
+    <!-- Nút Play -->
+    <button id="play-button"></button>
 
     <!-- Nhạc nền -->
     <audio id="background-music" src="https://github.com/JeiKei1206/Sn_tuan/raw/main/hpbd.mp3"></audio>
@@ -69,7 +102,7 @@
 
         let plane = { x: -200, y: h / 2 - 100 };
         let time = 0;
-        let musicStarted = false; 
+        let gameStarted = false;
 
         let backgroundImage = new Image();
         let planeImage = new Image();
@@ -143,16 +176,9 @@
             }
         }
 
-        function playMusicOnce(audioId) {
-            let audio = document.getElementById(audioId);
-            if (!audio.played.length) {
-                audio.play().catch(() => {
-                    console.log("Autoplay bị chặn! Đợi user tương tác...");
-                });
-            }
-        }
-
         function anim() {
+            if (!gameStarted) return; // Dừng lại nếu chưa bấm Play
+
             window.requestAnimationFrame(anim);
             ctx.clearRect(0, 0, w, h);
 
@@ -162,10 +188,6 @@
 
             if (planeImage.complete) {
                 ctx.drawImage(planeImage, plane.x, plane.y, 200, 100);
-                if (!musicStarted) {
-                    playMusicOnce("background-music");
-                    musicStarted = true;
-                }
             }
 
             plane.x += opts.planeSpeed;
@@ -176,7 +198,6 @@
             }
 
             drawWavingBanner(plane.x - 50, plane.y + 50, time);
-
             time++;
         }
 
@@ -189,12 +210,16 @@
                 img.style.opacity = "1";
             }, 100);
 
-            playMusicOnce("final-audio");
+            document.getElementById("final-audio").play();
         }
 
-        window.onload = function () {
+        // Khi bấm Play, bắt đầu animation & phát nhạc
+        document.getElementById("play-button").addEventListener("click", function () {
+            gameStarted = true;
+            this.style.display = "none"; // Ẩn nút Play
+            document.getElementById("background-music").play();
             anim();
-        };
+        });
 
         window.addEventListener("resize", function () {
             w = c.width = window.innerWidth;
