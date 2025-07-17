@@ -24,8 +24,6 @@
             background: #87CEEB;
             font-family: Times New Roman, sans-serif;
         }
-
-        /* Nút Play */
         #play-button {
             position: absolute;
             top: 50%;
@@ -39,8 +37,6 @@
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
             cursor: pointer;
         }
-
-        /* Hình tam giác trong nút Play */
         #play-button::after {
             content: "";
             position: absolute;
@@ -54,7 +50,6 @@
             border-bottom: 12px solid transparent;
         }
 
-        /* Ẩn ảnh ban đầu + kích thước nhỏ */
         #final-image {
             display: none;
             position: absolute;
@@ -70,17 +65,9 @@
 </head>
 <body>
     <canvas id="c"></canvas>
-
-    <!-- Nút Play -->
     <button id="play-button"></button>
-
-    <!-- Nhạc nền -->
     <audio id="background-music" src="https://github.com/JeiKei1206/Sn_tuan/raw/main/hpbd.mp3"></audio>
-
-    <!-- Hình ảnh xuất hiện sau khi máy bay bay xong -->
     <img id="final-image" src="Tuan.jpg">
-
-    <!-- Âm thanh lúc cuối -->
     <audio id="final-audio" src="https://github.com/JeiKei1206/Sn_tuan/raw/main/cheer.mp3"></audio>
 
     <script>
@@ -90,7 +77,7 @@
             h = (c.height = window.innerHeight);
 
         let opts = {
-            text: "Mừng sinh nhật Tuấn ngu",
+            text: "Mừng sinh nhật Tuấn",
             planeSpeed: 2,
             bannerHeight: 60,
             waveAmplitude: 10,
@@ -177,8 +164,7 @@
         }
 
         function anim() {
-            if (!gameStarted) return; // Dừng lại nếu chưa bấm Play
-
+            if (!gameStarted) return; 
             window.requestAnimationFrame(anim);
             ctx.clearRect(0, 0, w, h);
 
@@ -216,7 +202,7 @@
         // Khi bấm Play, bắt đầu animation & phát nhạc
         document.getElementById("play-button").addEventListener("click", function () {
             gameStarted = true;
-            this.style.display = "none"; // Ẩn nút Play
+            this.style.display = "none"; 
             document.getElementById("background-music").play();
             anim();
         });
